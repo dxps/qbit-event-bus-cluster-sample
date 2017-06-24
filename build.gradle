@@ -2,13 +2,47 @@ group 'tech.vision8.reactives.qbit'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'idea'
 
-sourceCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+}
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
+    
+    compile group: 'io.advantageous.qbit',  name: 'qbit-core',  version: '2.0.0'
+    compile group: 'io.advantageous.qbit',  name: 'qbit-vertx', version: '2.0.0'
+    
+    compile group: 'io.advantageous.qbit',  name: 'qbit-eventbus-replicator', version: '1.10.6'
+    
+    compile group: 'io.advantageous.qbit',  name: 'qbit-admin', version: '2.0.0'
+    compile group: 'io.advantageous.qbit',  name: 'qbit-consul-client', version: '2.0.0'
+    
+    compile "org.slf4j:slf4j-api:[1.7,1.8)"
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+    
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    
+}
+
+idea {
+    project {
+        jdkName = '1.8'
+        languageLevel = '1.8'
+    }
 }
