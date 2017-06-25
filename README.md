@@ -7,7 +7,7 @@
 
 ## Usage
 
-##### Start the components:
+### Start the components:
 - Consul server agent
    - it should listen on the standard endpoint `localhost:8500`
 - 1st instance of the service
@@ -19,7 +19,7 @@
 > - the http request is processed by that instance
 > - the event (generated based on the request) is consumed by both instances<br/>(through the help of the clustered event bus).
 
-##### Example 1: As a GET request to the first instance:
+### Example 1: As a GET request to the first instance:
 
 - sending the request:
 ```bash
@@ -38,7 +38,7 @@ $
 [onClassifyTransactionEvent] Transaction{ fromAccount='123', toAccount='456', amount=17.000000, currency='EUR' }
 ```
 
-##### Example 2: As a POST request to the second instance:
+### Example 2: As a POST request to the second instance:
 
 - sending the request:
 ```bash
