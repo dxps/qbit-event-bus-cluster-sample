@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+	
+	<property name="LOGDIR" value="/logs/apps/qbit/event-bus-cluster-sample" />
+	
+	<!-- to remove the noise generated at app startup -->
+	<statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+	
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger - %msg%n</pattern>
+		</layout>
+	</appender>
+	
+	<appender name="HEALTHCHECKLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGDIR}/transaction-classifier-service-healthcheck.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover. Make sure the path matches the one in the file element or else
+			 the rollover logs are placed in the working directory. -->
+			<fileNamePattern>${LOGDIR}/transaction-classifier-service-healthcheck_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>5MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep a 1 day history -->
+			<maxHistory>1</maxHistory>
+		</rollingPolicy>
+		
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="INFRALOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGDIR}/transaction-classifier-service-infrastructure.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover. Make sure the path matches the one in the file element or else
+			 the rollover logs are placed in the working directory. -->
+			<fileNamePattern>${LOGDIR}/transaction-classifier-service-infrastructure_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>5MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep a 1 day history -->
+			<maxHistory>1</maxHistory>
+		</rollingPolicy>
+		
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<logger name="io.advantageous.qbit.service.health" level="debug" additivity="false">
+		<appender-ref ref="HEALTHCHECKLOG" />
+	</logger>
+	
+	<logger name="io.advantageous.qbit.eventbus" level="info" additivity="false">
+		<appender-ref ref="INFRALOG" />
+	</logger>
+	
+	<logger name="ch.qos.logback" level="info" additivity="false">
+		<appender-ref ref="INFRALOG" />
+	</logger>
+	
+	<root level="INFO">
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</configuration>

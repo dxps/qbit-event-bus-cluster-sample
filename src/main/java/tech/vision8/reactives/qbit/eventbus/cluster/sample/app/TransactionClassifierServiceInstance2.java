@@ -5,7 +5,7 @@ import tech.vision8.reactives.qbit.eventbus.cluster.sample.TransactionClassifier
 /**
  *
  * @author vision8
- * @implNote Created on 2017-06-24.
+ * @since 2017-06-24
  */
 public class TransactionClassifierServiceInstance2 {
 	

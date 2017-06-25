@@ -9,18 +9,55 @@
 
 Start the components:
 - Consul server agent
-   - it should listen on the standard port 
+   - it should listen on the standard endpoint `localhost:8500`
 - 1st instance of the service
    - `TransactionClassifierServiceInstance1`
 - start 2nd instance of the service
    - `TransactionClassifierServiceInstance2`
 
-Send a message to the first istance:
+Send the request to one of the instances and you will see that:
+- the request is processed by that instance
+- the event that is generated gets received by both instances<br/>(through the help of the clustered event bus).
+
+Example 1: As a GET request to the first instance:
+
+- sending the request:
 ```bash
-$ curl -X POST  -H "Content-Type: application/json" http://localhost:8881/classify -d '{ "fromAccountIBAN":"123", "toAccountIBAN":"456", "amount":17 }'
+$ curl -sS http://localhost:8881/classify/txn/123/456/17/EUR  -H "Content-Type: application/json"
 "success"
 $
 ```
+- the output of the first instance will show:
+```
+[classifyAsGet] fromAccount='123' toAccount='456' amount=17.000000 currency='EUR'
 
-## TODO:
-- event containing the financial transaction
+[onClassifyTransactionEvent] Transaction{ fromAccount='123', toAccount='456', amount=17.000000, currency='EUR' }
+```
+- the output of the second instance will show:
+```
+[onClassifyTransactionEvent] Transaction{ fromAccount='123', toAccount='456', amount=17.000000, currency='EUR' }
+```
+
+Example 2: As a POST request to the second instance:
+
+- sending the request:
+```bash
+$ curl -sS -X POST  http://localhost:8881/classify/txn \
+       -H "Content-Type: application/json" \
+       -d '{ "fromAccount":"123", "toAccount":"456", "amount":17, "currency":"EUR" }'
+"success"
+$
+```
+- the output of the first instance will show:
+```
+[classifyAsPost] transaction=Transaction{ fromAccount='123', toAccount='456', amount=17.000000, currency='EUR' }
+
+[onClassifyTransactionEvent] Transaction{ fromAccount='123', toAccount='456', amount=17.000000, currency='EUR' }
+```
+
+- the output of the second instance will show:
+```
+[onClassifyTransactionEvent] Transaction{ fromAccount='123', toAccount='456', amount=17.000000, currency='EUR' }
+```
+Both instances are using the console as the standard output, based on `logback.xml` config.
+

@@ -8,53 +8,62 @@ import java.util.Currency;
  * (looking more like a Value Object).
  *
  * @author vision8
- * @implNote Created on 2017-06-24.
+ * @since 2017-06-24
  */
 public class Transaction {
 	
-	private final String fromAccountIBAN;
+	private final String fromAccount;
 	
-	private String toAccountIBAN;
+	private String toAccount;
 	
 	private BigDecimal amount;
 	
 	private Currency currency = Currency.getInstance("EUR");
 	
-	public Transaction(String fromAccountIBAN, String toAccountIBAN, BigDecimal amount) {
-		this.fromAccountIBAN = fromAccountIBAN;
-		this.toAccountIBAN = toAccountIBAN;
+	
+	/** Crate a new transaction. */
+	public Transaction(String fromAccount, String toAccount, BigDecimal amount) {
+		this.fromAccount = fromAccount;
+		this.toAccount = toAccount;
 		this.amount = amount;
 	}
 	
-	public Transaction(String fromAccountIBAN, String toAccountIBAN, BigDecimal amount, Currency currency) {
-		this(fromAccountIBAN, toAccountIBAN, amount);
+	
+	/** Crate a new transaction. */
+	public Transaction(String fromAccount, String toAccount, BigDecimal amount, Currency currency) {
+		this(fromAccount, toAccount, amount);
 		this.currency = currency;
 	}
 	
-	public String fromAccountIBAN() {
-		return fromAccountIBAN;
+	
+	/** Get the source (debited) account of the transaction. */
+	public String fromAccount() {
+		return fromAccount;
 	}
 	
-	public String toAccountIBAN() {
-		return toAccountIBAN;
+	
+	/** Get the target(credited) account of the transaction. */
+	public String toAccount() {
+		return toAccount;
 	}
 	
+	
+	/** Get the amount of the transaction. */
 	public BigDecimal amount() {
 		return amount;
 	}
 	
+	
+	/** Get the currency of the transaction. */
 	public Currency currency() {
 		return currency;
 	}
 	
+	
 	@Override
 	public String toString() {
-		return "Transaction{" +
-				"fromAccountIBAN='" + fromAccountIBAN + '\'' +
-				", toAccountIBAN='" + toAccountIBAN + '\'' +
-				", amount=" + amount +
-				", currency=" + currency +
-				'}';
+		return String.format("Transaction{ fromAccount='%s', toAccount='%s', amount=%f, currency='%s' }",
+				fromAccount, toAccount, amount, currency);
 	}
 	
 }

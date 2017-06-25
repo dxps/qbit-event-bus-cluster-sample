@@ -1,8 +1,8 @@
 package tech.vision8.reactives.qbit.eventbus.cluster.sample;
 
 import io.advantageous.qbit.admin.ManagedServiceBuilder;
-import io.advantageous.qbit.annotation.Listen;
-import io.advantageous.qbit.annotation.RequestMapping;
+import io.advantageous.qbit.annotation.*;
+import io.advantageous.qbit.annotation.http.GET;
 import io.advantageous.qbit.annotation.http.POST;
 import io.advantageous.qbit.eventbus.EventBusCluster;
 import io.advantageous.qbit.eventbus.EventBusClusterBuilder;
@@ -13,14 +13,19 @@ import io.advantageous.qbit.service.BaseService;
 import io.advantageous.qbit.service.stats.StatsCollector;
 import io.advantageous.qbit.util.Timer;
 import tech.vision8.reactives.qbit.eventbus.cluster.sample.domain.ClassifyTransactionEvent;
+import tech.vision8.reactives.qbit.eventbus.cluster.sample.domain.Transaction;
+
+import java.math.BigDecimal;
+import java.util.Currency;
 
 /**
- * Sample service that uses events for executing the business logic, instead of being a REST service.
+ * Sample service that uses events for executing the business logic.<br/>
+ * It uses a REST operation named "/classify" for getting the input.
  *
  * @author vision8
- * @implNote Created on 2017-06-24.
+ * @since 2017-06-24
  */
-@RequestMapping("/")
+@RequestMapping("/classify")
 public class TransactionClassifierService extends BaseService {
 	
 	private final EventManager eventManager;
@@ -35,18 +40,28 @@ public class TransactionClassifierService extends BaseService {
 		reactor.addServiceToFlush(eventManager);
 	}
 	
-	@POST("/classify")
-	public void receiveEvent(ClassifyTransactionEvent event) {
+	@RequestMapping("/txn/{0}/{1}/{2}/{3}")
+	public void classifyAsGet(@PathVariable String fromAccount, @PathVariable String toAccount,
+	                          @PathVariable double amount, @PathVariable String currency) {
 		
-		eventManager.sendArguments("ClassifyTransactionEvent", event);
+		System.out.printf("\n[classifyAsGet] fromAccount='%s' toAccount='%s' amount=%f currency='%s'\n\n",
+				fromAccount, toAccount, amount, currency);
+		eventManager.sendArguments("ClassifyTransactionEvent",
+				new ClassifyTransactionEvent(new Transaction(fromAccount, toAccount, BigDecimal.valueOf(amount), Currency.getInstance(currency))));
+	}
+	
+	@POST("/txn")
+	public void classifyAsPost(final Transaction transaction) {
+		
+		System.out.printf("\n[classifyAsPost] transaction=%s\n", transaction);
+		eventManager.sendArguments("ClassifyTransactionEvent",
+				new ClassifyTransactionEvent(transaction));
 	}
 	
 	@Listen("ClassifyTransactionEvent")
-	public void consumeClassifyTransactionEvent(ClassifyTransactionEvent event) {
+	public void onClassifyTransactionEvent(ClassifyTransactionEvent event) {
 		
-		System.out.println("\n------------------------------------------------------");
-		System.out.printf("\n>>> consumeClassifyTransactionEvent > received event:\n%s\n", event);
-		System.out.println("------------------------------------------------------\n");
+		System.out.printf("\n[onClassifyTransactionEvent] %s\n\n", event.transaction());
 	}
 	
 	
