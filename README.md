@@ -7,19 +7,19 @@
 
 ## Usage
 
-Start the components:
+##### Start the components:
 - Consul server agent
    - it should listen on the standard endpoint `localhost:8500`
 - 1st instance of the service
    - `TransactionClassifierServiceInstance1`
-- start 2nd instance of the service
+- 2nd instance of the service
    - `TransactionClassifierServiceInstance2`
 
-Send the request to one of the instances and you will see that:
-- the request is processed by that instance
-- the event that is generated gets received by both instances<br/>(through the help of the clustered event bus).
+> _Note:_ Send the request to one of the instances and you will see that:
+> - the http request is processed by that instance
+> - the event (generated based on the request) is consumed by both instances<br/>(through the help of the clustered event bus).
 
-Example 1: As a GET request to the first instance:
+##### Example 1: As a GET request to the first instance:
 
 - sending the request:
 ```bash
@@ -27,18 +27,18 @@ $ curl -sS http://localhost:8881/classify/txn/123/456/17/EUR  -H "Content-Type: 
 "success"
 $
 ```
-- the output of the first instance will show:
+- 1st instance output will show:
 ```
 [classifyAsGet] fromAccount='123' toAccount='456' amount=17.000000 currency='EUR'
 
 [onClassifyTransactionEvent] Transaction{ fromAccount='123', toAccount='456', amount=17.000000, currency='EUR' }
 ```
-- the output of the second instance will show:
+- 2nd instance output will show:
 ```
 [onClassifyTransactionEvent] Transaction{ fromAccount='123', toAccount='456', amount=17.000000, currency='EUR' }
 ```
 
-Example 2: As a POST request to the second instance:
+##### Example 2: As a POST request to the second instance:
 
 - sending the request:
 ```bash
