@@ -1,6 +1,6 @@
 package tech.vision8.reactives.qbit.eventbus.cluster.sample.app;
 
-import tech.vision8.reactives.qbit.eventbus.cluster.sample.TransactionClassifierService;
+import tech.vision8.reactives.qbit.eventbus.cluster.sample.services.TransactionClassifierService;
 
 /**
  *

@@ -1,4 +1,4 @@
-package tech.vision8.reactives.qbit.eventbus.cluster.sample;
+package tech.vision8.reactives.qbit.eventbus.cluster.sample.services;
 
 import io.advantageous.qbit.admin.ManagedServiceBuilder;
 import io.advantageous.qbit.annotation.*;
@@ -12,6 +12,8 @@ import io.advantageous.qbit.reactive.ReactorBuilder;
 import io.advantageous.qbit.service.BaseService;
 import io.advantageous.qbit.service.stats.StatsCollector;
 import io.advantageous.qbit.util.Timer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tech.vision8.reactives.qbit.eventbus.cluster.sample.domain.ClassifyTransactionEvent;
 import tech.vision8.reactives.qbit.eventbus.cluster.sample.domain.Transaction;
 
@@ -30,6 +32,7 @@ public class TransactionClassifierService extends BaseService {
 	
 	private final EventManager eventManager;
 	
+	private Logger logger = LoggerFactory.getLogger(TransactionClassifierService.class);
 	
 	public TransactionClassifierService(
 			final EventManager eventManager, final String statKeyPrefix,
@@ -44,7 +47,7 @@ public class TransactionClassifierService extends BaseService {
 	public void classifyAsGet(@PathVariable String fromAccount, @PathVariable String toAccount,
 	                          @PathVariable double amount, @PathVariable String currency) {
 		
-		System.out.printf("\n[classifyAsGet] fromAccount='%s' toAccount='%s' amount=%f currency='%s'\n\n",
+		logger.info("\n[classifyAsGet] fromAccount='{}' toAccount='{}' amount={} currency='{}'\n\n",
 				fromAccount, toAccount, amount, currency);
 		eventManager.sendArguments("ClassifyTransactionEvent",
 				new ClassifyTransactionEvent(new Transaction(fromAccount, toAccount, BigDecimal.valueOf(amount), Currency.getInstance(currency))));
@@ -53,7 +56,7 @@ public class TransactionClassifierService extends BaseService {
 	@POST("/txn")
 	public void classifyAsPost(final Transaction transaction) {
 		
-		System.out.printf("\n[classifyAsPost] transaction=%s\n", transaction);
+		logger.info("\n[classifyAsPost] transaction={}\n", transaction);
 		eventManager.sendArguments("ClassifyTransactionEvent",
 				new ClassifyTransactionEvent(transaction));
 	}
@@ -61,7 +64,7 @@ public class TransactionClassifierService extends BaseService {
 	@Listen("ClassifyTransactionEvent")
 	public void onClassifyTransactionEvent(ClassifyTransactionEvent event) {
 		
-		System.out.printf("\n[onClassifyTransactionEvent] %s\n\n", event.transaction());
+		logger.info("\n[onClassifyTransactionEvent] event.transaction={}\n\n", event.transaction());
 	}
 	
 	
