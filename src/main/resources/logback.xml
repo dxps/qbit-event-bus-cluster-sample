@@ -7,9 +7,12 @@
 	<!-- to remove the noise generated at app startup -->
 	<statusListener class="ch.qos.logback.core.status.NopStatusListener" />
 	
+	<conversionRule conversionWord="threadId"
+	                converterClass="tech.vision8.reactives.qbit.eventbus.cluster.sample.utils.ThreadIdConverter"/>
+	
 	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
-			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %class{0} - %msg%n</pattern>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread:%threadId] %-5level %class{0} - %msg%n</pattern>
 		</layout>
 	</appender>
 	
