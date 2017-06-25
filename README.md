@@ -1,9 +1,6 @@
 # QBit's Event Bus Cluster Sample
 
-
-## Install
-
-
+This is a sample implementation of a clustered event bus using QBit library.
 
 ## Usage
 
@@ -48,16 +45,16 @@ $ curl -sS -X POST  http://localhost:8881/classify/txn \
 "success"
 $
 ```
-- the output of the first instance will show:
+- 1st instance output will show:
 ```
 [classifyAsPost] transaction=Transaction{ fromAccount='123', toAccount='456', amount=17.000000, currency='EUR' }
 
 [onClassifyTransactionEvent] Transaction{ fromAccount='123', toAccount='456', amount=17.000000, currency='EUR' }
 ```
 
-- the output of the second instance will show:
+- 2nd instance output will show:
 ```
 [onClassifyTransactionEvent] Transaction{ fromAccount='123', toAccount='456', amount=17.000000, currency='EUR' }
 ```
-Both instances are using the console as the standard output, based on `logback.xml` config.
+Both instances are using the console as the standard output as configured on `logback.xml`.
 
