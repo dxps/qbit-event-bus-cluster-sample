@@ -1,4 +1,6 @@
-package tech.vision8.reactives.qbit.eventbus.cluster.sample.domain;
+package tech.vision8.reactives.qbit.eventbus.cluster.sample.domain.events;
+
+import tech.vision8.reactives.qbit.eventbus.cluster.sample.domain.Transaction;
 
 import java.math.BigDecimal;
 import java.util.Currency;
