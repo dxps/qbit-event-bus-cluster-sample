@@ -1,8 +1,9 @@
 package tech.vision8.reactives.qbit.eventbus.cluster.sample.services;
 
 import io.advantageous.qbit.admin.ManagedServiceBuilder;
-import io.advantageous.qbit.annotation.*;
-import io.advantageous.qbit.annotation.http.GET;
+import io.advantageous.qbit.annotation.Listen;
+import io.advantageous.qbit.annotation.PathVariable;
+import io.advantageous.qbit.annotation.RequestMapping;
 import io.advantageous.qbit.annotation.http.POST;
 import io.advantageous.qbit.eventbus.EventBusCluster;
 import io.advantageous.qbit.eventbus.EventBusClusterBuilder;
@@ -14,8 +15,8 @@ import io.advantageous.qbit.service.stats.StatsCollector;
 import io.advantageous.qbit.util.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tech.vision8.reactives.qbit.eventbus.cluster.sample.domain.ClassifyTransactionEvent;
 import tech.vision8.reactives.qbit.eventbus.cluster.sample.domain.Transaction;
+import tech.vision8.reactives.qbit.eventbus.cluster.sample.domain.events.ClassifyTransactionEvent;
 
 import java.math.BigDecimal;
 import java.util.Currency;
